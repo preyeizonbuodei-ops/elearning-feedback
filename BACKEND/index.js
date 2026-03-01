@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookie_parser = require('cookie-parser');
-const authRouter = require('./router/authRouter.js');
+const authRouter = require('./router/authRouter');
 const mongoose = require('mongoose')
 const app = express()
 
@@ -19,17 +19,20 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log(error)
   })
 
+// Routes
+app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter)
 
 // API endpoint
 app.get('/', (req, res) => {
-    res.status(200).json({ message: "Welcome" });
+  res.status(200).json({ message: "Welcome" });
 });
 
-// Routes
-app.use('/auth', authRouter);
+
+
 
 // Server listener
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

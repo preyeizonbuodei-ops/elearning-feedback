@@ -6,7 +6,6 @@ import '../Pages/comment.css'
 function Comment() {
   const [comment, setComment] = useState("");
   const [username, setUsername] = useState("");
-  const navigate = useNavigate();
   const location = useLocation();
 
   // Get username passed from Register page via navigate state

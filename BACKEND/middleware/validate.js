@@ -1,6 +1,12 @@
 const joi = require('joi');
 
+
 exports.userSignUP = joi.object({
+  username: joi.string()
+  .min(2)
+  .max(30)
+  .required(),
+
   email: joi.string()
     .min(3)
     .max(40)
@@ -8,8 +14,15 @@ exports.userSignUP = joi.object({
     .email({ tlds: { allow: ['com', 'net'] } }),
 
   password: joi.string()
-    .required()
-    .pattern(new RegExp(
-      '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,}$'
-    ))
+    .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) .required() 
+    
+    .messages({ "string.pattern.base": "Password must be at least 8 characters long and include at least one letter and one number" })
 });
+
+
+exports.userComment = joi.object({
+  comment: joi.string()
+  .min(3)
+  .max(200)
+  .required()
+})
