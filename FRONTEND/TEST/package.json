@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "predeploy": "npm run build",  
+    "deploy": "gh-pages -d build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -15,6 +17,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.1",
+    "homepage": "https://preyeizonbuodei-ops.github.io/elearning-feedback",
+
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
