@@ -2,10 +2,10 @@ const express = require('express')
 const user = require('../module/userSchema')
 const { userSignUP, userComment } = require('../middleware/validate')
 const { DoHash } = require('../utils/hash')
-const comment = require('../module/commentSchema')
-const commentSchema = require('../module/commentSchema')
+const Comment = require('../module/commentSchema')
 express.Router()
 const mongoose = require('mongoose')
+
 
 
 // signup controller or module
@@ -38,25 +38,25 @@ exports.signup = async (req, res) => {
 
 // comment controller
 exports.comment = async (req, res) => {
-    const { comment } = req.body;
+  const { username, comment } = req.body;
 
-    try {
-        const { error } = userComment.validate({ comment });
-        if (error) {
-            return res.status(400).json({ success: false, message: "Comment must not be empty" });
-        }
-
-        const newComment = new commentSchema({ comment });
-        const CommentResult = await newComment.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Your comment has been saved successfully",
-            data: CommentResult
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: "Internal server error" });
+  try {
+    const { error } = userComment.validate({ username, comment });
+    if (error) {
+      return res.status(400).json({ success: false, message: error.details[0].message });
     }
+
+    const newComment = new Comment({ username, comment });
+    const result = await newComment.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Your comment has been saved successfully",
+      data: result
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
 };

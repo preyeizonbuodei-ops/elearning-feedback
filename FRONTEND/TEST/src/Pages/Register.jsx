@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Modal from "./Modal";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,16 +12,15 @@ function Register() {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState("success");
+
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+    setFormData({ ...formData, [name]: value });
 
-    // Clear error immediately if field is valid
     let newErrors = { ...errors };
     if (name === "username" && value.trim()) delete newErrors.username;
     if (name === "email" && /\S+@\S+\.\S+/.test(value)) delete newErrors.email;
@@ -48,18 +48,20 @@ function Register() {
 
     setLoading(true);
     try {
-      // Axios POST request to your backend API
       const response = await axios.post("http://localhost:4000/api/auth/signup", formData);
 
-      if (response.status === 200) {
-        // If backend confirms credentials are correct, navigate to comment page
-        navigate("/comment");
+      if (response.status === 201) {
+        setMessage("Registered successfully!");
+        setMessageType("success");
+        navigate("/comment", { state: { username: formData.username } });
       } else {
-        alert(response.data.message || "Registration failed");
+        setMessage(response.data.message || "Registration failed");
+        setMessageType("error");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert(error.response?.data?.message || "Something went wrong. Please try again.");
+      setMessage(error.response?.data?.message || "Registration failed");
+      setMessageType("error");
     } finally {
       setLoading(false);
     }
@@ -75,74 +77,44 @@ function Register() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username */}
           <div>
-            <label className="block text-gray-200 font-medium mb-2">
-              Username
-            </label>
+            <label className="block text-gray-200 font-medium mb-2">Username</label>
             <input
               type="text"
               name="username"
               placeholder="Enter username"
               value={formData.username}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition ${
-                errors.username
-                  ? "border-red-500 focus:ring-red-500"
-                  : formData.username
-                  ? "border-green-500 focus:ring-green-500"
-                  : "border-gray-600 focus:ring-indigo-500"
-              } bg-gray-800 text-white placeholder-gray-400`}
+              className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white"
             />
-            {errors.username && (
-              <p className="text-red-400 text-sm mt-1">{errors.username}</p>
-            )}
+            {errors.username && <p className="text-red-400 text-sm mt-1">{errors.username}</p>}
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-gray-200 font-medium mb-2">
-              Email
-            </label>
+            <label className="block text-gray-200 font-medium mb-2">Email</label>
             <input
               type="text"
               name="email"
               placeholder="Enter email"
               value={formData.email}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition ${
-                errors.email
-                  ? "border-red-500 focus:ring-red-500"
-                  : formData.email && /\S+@\S+\.\S+/.test(formData.email)
-                  ? "border-green-500 focus:ring-green-500"
-                  : "border-gray-600 focus:ring-indigo-500"
-              } bg-gray-800 text-white placeholder-gray-400`}
+              className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white"
             />
-            {errors.email && (
-              <p className="text-red-400 text-sm mt-1">{errors.email}</p>
-            )}
+            {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-gray-200 font-medium mb-2">
-              Password
-            </label>
+            <label className="block text-gray-200 font-medium mb-2">Password</label>
             <input
               type="password"
               name="password"
               placeholder="Enter password"
               value={formData.password}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition ${
-                errors.password
-                  ? "border-red-500 focus:ring-red-500"
-                  : formData.password
-                  ? "border-green-500 focus:ring-green-500"
-                  : "border-gray-600 focus:ring-indigo-500"
-              } bg-gray-800 text-white placeholder-gray-400`}
+              className="w-full px-4 py-2 border rounded-lg bg-gray-800 text-white"
             />
-            {errors.password && (
-              <p className="text-red-400 text-sm mt-1">{errors.password}</p>
-            )}
+            {errors.password && <p className="text-red-400 text-sm mt-1">{errors.password}</p>}
           </div>
 
           {/* Submit Button */}
@@ -155,6 +127,13 @@ function Register() {
           </button>
         </form>
       </div>
+
+      {/* Modal dialog */}
+      <Modal
+        message={message}
+        type={messageType}
+        onClose={() => setMessage(null)}
+      />
     </div>
   );
 }

@@ -21,6 +21,10 @@ exports.userSignUP = joi.object({
 
 
 exports.userComment = joi.object({
+  username: joi.string()
+  .trim()
+  .required(),
+
   comment: joi.string()
   .min(3)
   .max(200)
