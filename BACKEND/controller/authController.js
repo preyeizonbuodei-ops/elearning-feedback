@@ -8,7 +8,7 @@ express.Router()
 const mongoose = require('mongoose')
 
 
-// signup controller
+// signup controller or module
 exports.signup = async (req, res) => {
     const {username, email, password } = req.body;
 
