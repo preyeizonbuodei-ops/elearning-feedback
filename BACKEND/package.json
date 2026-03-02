@@ -23,7 +23,7 @@
     "nodemailer": "^8.0.1",
     "nodemon": "^3.1.14",
     "router": "^2.2.0",
-    "homepage": "https://preyeizonbuodei-ops.github.io/elearning-feedback"
+    "elearning-feedback": "github:preyeizonbuodei-ops/elearning-feedback"
 
   }
 }
