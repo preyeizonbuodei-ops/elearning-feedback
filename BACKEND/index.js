@@ -1,35 +1,30 @@
+require('dotenv').config(); // Load environment variables
 const express = require('express');
 const cors = require('cors');
-const cookie_parser = require('cookie-parser');
+const cookieParser = require('cookie-parser'); // use camelCase
 const authRouter = require('./router/authRouter');
-const mongoose = require('mongoose')
-const app = express()
+const mongoose = require('mongoose');
+
+const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use(cookie_parser());
+app.use(cookieParser()); // fixed naming
 
 // Connect to MongoDB
+// Make sure process.env.MONGODB_URI is set in .env
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Database connected successfully✅✅🏀")
-  })
-  .catch((error) => {
-    console.log(error)
-  })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
 // Routes
 app.use('/api/auth', authRouter);
-app.use('/api/auth', authRouter)
 
-// API endpoint
+// Test endpoint
 app.get('/', (req, res) => {
   res.status(200).json({ message: "Welcome" });
 });
-
-
-
 
 // Server listener
 const PORT = process.env.PORT || 5000;
