@@ -14,6 +14,12 @@ app.use(cors());
 app.use(cookieParser());
 
 
+// OR, more secure, allow only your frontend URL
+app.use(cors({
+  origin: "https://elearning-feedback-1.onrender.com",
+  credentials: true
+}));
+
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Database connected successfully✅✅🏀")
