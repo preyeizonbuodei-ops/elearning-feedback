@@ -27,6 +27,6 @@ exports.userComment = joi.object({
 
   comment: joi.string()
   .min(3)
-  .max(600)
+  .max(1000)
   .required()
 })
