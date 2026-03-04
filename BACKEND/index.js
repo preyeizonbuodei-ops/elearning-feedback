@@ -3,7 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./router/authRouter');
 const mongoose = require('mongoose');
-const connectDB = require('./mongodb/mongodbconnection.js');
+// const connectDB = require('./mongodb/mongodbconnection.js');
 require('dotenv').config();
 
 const app = express();
@@ -14,9 +14,13 @@ app.use(cors());
 app.use(cookieParser());
 
 
-const DATABASE_URI = process.env.DATABASE_URI || 'mongodb://127.0.0.1:27017/Comments';
-
-connectDB(DATABASE_URI)
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Database connected successfully✅✅🏀")
+  })
+  .catch((error) => {
+    console.log(error)
+  })
 
 app.use('/api/auth', authRouter);
 
