@@ -48,7 +48,7 @@ function Register() {
 
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:4000/api/auth/signup", formData);
+      const response = await axios.post("https://elearning-feedback-backend.onrender.com/api/auth/signin", formData);
 
       if (response.status === 201) {
         setMessage("Registered successfully!");

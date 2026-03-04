@@ -31,7 +31,7 @@ function Comment() {
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/api/auth/comment", {
+      const response = await axios.post("https://elearning-feedback-backend.onrender.com/api/auth/comment", {
         username,
         comment,
       });
