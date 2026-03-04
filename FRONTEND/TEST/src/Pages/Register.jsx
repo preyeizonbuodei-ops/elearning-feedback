@@ -48,11 +48,15 @@ function Register() {
 
     setLoading(true);
     try {
-      const response = await axios.post("https://elearning-feedback-backend.onrender.com/api/auth/signin", formData);
+      const response = await axios.post(
+        "https://elearning-feedback-backend.onrender.com/api/auth/signup",
+        formData
+      );
 
       if (response.status === 201) {
         setMessage("Registered successfully!");
         setMessageType("success");
+        // navigate to comment page with username
         navigate("/comment", { state: { username: formData.username } });
       } else {
         setMessage(response.data.message || "Registration failed");
