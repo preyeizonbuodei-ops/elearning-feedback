@@ -3,6 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./router/authRouter');
 const mongoose = require('mongoose');
+const connectDB = require('./mongodb/mongodbconnection.js');
 require('dotenv').config();
 
 const app = express();
@@ -13,16 +14,9 @@ app.use(cors());
 app.use(cookieParser());
 
 
+const DATABASE_URI = process.env.DATABASE_URI || 'mongodb://127.0.0.1:27017/Comments';
 
-
-
-
-
-
-mongoose.connect('mongodb://127.0.0.1:27017')
-  .then(() => console.log('✅ Connected to local MongoDB'))
-  .catch(err => console.error('❌ MongoDB connection error:', err));
-
+connectDB(DATABASE_URI)
 
 app.use('/api/auth', authRouter);
 
