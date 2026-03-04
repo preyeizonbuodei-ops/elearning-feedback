@@ -18,11 +18,10 @@ app.use(cookieParser());
 
 
 
-const uri = process.env.MONGODB_URI;
 
-mongoose.connect(uri)
-  .then(() => console.log("✅ Connected to MongoDB Atlas"))
-  .catch(err => console.error("❌ MongoDB connection error:", err));
+mongoose.connect('mongodb://127.0.0.1:27017')
+  .then(() => console.log('✅ Connected to local MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
 
 app.use('/api/auth', authRouter);
